@@ -21,15 +21,17 @@ export type DatetimePresentation = 'date-time' | 'time-date' | 'date' | 'time' |
 
 export type TitleSelectedDatesFormatter = (selectedDates: string[]) => string;
 
-export type DatetimeHighlightStyle =
-  | {
-      textColor: string;
-      backgroundColor?: string;
-    }
-  | {
-      textColor?: string;
-      backgroundColor: string;
-    };
+export type DatetimeHighlightStyle = {
+  type: DatetimeHighlightType;
+};
+
+export enum DatetimeHighlightType {
+  none = 0,
+  entry = 1,
+  entryOwnApproval = 2,
+  entryApproved = 3,
+  entryCanceled = 4
+}
 
 export type DatetimeHighlight = { date: string } & DatetimeHighlightStyle;
 

@@ -10,16 +10,17 @@ import { caretDownSharp, caretUpSharp, chevronBack, chevronDown, chevronForward 
 import { getIonMode } from '../../global/ionic-global';
 import type { Color, Mode, StyleEventDetail } from '../../interface';
 
-import type {
-  DatetimePresentation,
-  DatetimeChangeEventDetail,
-  DatetimeParts,
-  TitleSelectedDatesFormatter,
-  DatetimeHighlight,
-  DatetimeHighlightStyle,
-  DatetimeHighlightCallback,
-  DatetimeHourCycle,
-  FormatOptions,
+import {
+  type DatetimePresentation,
+  type DatetimeChangeEventDetail,
+  type DatetimeParts,
+  type TitleSelectedDatesFormatter,
+  type DatetimeHighlight,
+  type DatetimeHighlightStyle,
+  type DatetimeHighlightCallback,
+  type DatetimeHourCycle,
+  type FormatOptions,
+  DatetimeHighlightType,
 } from './datetime-interface';
 import { isSameDay, warnIfValueOutOfBounds, isBefore, isAfter } from './utils/comparison';
 import type { WheelColumnOption } from './utils/data';
@@ -2283,7 +2284,7 @@ export class Datetime implements ComponentInterface {
              * Custom highlight styles should not override the style for selected dates,
              * nor apply to "filler days" at the start of the grid.
              */
-            if (highlightedDates !== undefined && !isActive && day !== null) {
+            if (highlightedDates !== undefined && day !== null) {
               dateStyle = getHighlightStyles(highlightedDates, dateIsoString, el);
             }
 
@@ -2308,12 +2309,31 @@ export class Datetime implements ComponentInterface {
                   // always take priority.
                   ref={(el) => {
                     if (el) {
-                      el.style.setProperty('color', `${dateStyle ? dateStyle.textColor : ''}`, 'important');
-                      el.style.setProperty(
-                        'background-color',
-                        `${dateStyle ? dateStyle.backgroundColor : ''}`,
-                        'important'
-                      );
+                      if (dateStyle && (dateStyle.type !== DatetimeHighlightType.none)) {
+                        switch (dateStyle.type) {    
+                          case DatetimeHighlightType.entry:
+                            el.style.setProperty('background-color', '#026cd41A');
+                            break;
+
+                          case DatetimeHighlightType.entryOwnApproval:
+                            el.style.setProperty('background-color', '#026cd41A');
+                            el.style.setProperty('border', '2px dashed #026cd4');
+                            break;
+
+                          case DatetimeHighlightType.entryApproved:
+                            el.style.setProperty('background-color', '#026cd4');
+                            el.style.setProperty('color', '#ffffff');
+                            break;
+
+                          case DatetimeHighlightType.entryCanceled:
+                            el.style.setProperty('background-color', '#ffc600');
+                            break;
+                        }                        
+                      } else {
+                        el.style.setProperty('background-color', 'transparent', 'important');
+                        el.style.setProperty('color', '#000000', 'important');
+                        el.style.setProperty('border', 'none', 'important');
+                      }
                     }
                   }}
                   tabindex="-1"

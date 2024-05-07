@@ -46,16 +46,10 @@
       <ion-content class="ion-padding">
         <div class="grid">
           <div class="grid-item">
-            <h2>With Array</h2>
-            <ion-datetime locale="en-US" id="withArray" presentation="date" value="2023-01-01"></ion-datetime>
+            <ion-datetime locale="en-US" id="withArray" presentation="date" mode="md"></ion-datetime>
           </div>
           <div class="grid-item">
-            <h2>With Callback</h2>
-            <ion-datetime locale="en-US" id="withCallback" presentation="date" value="2023-01-01"></ion-datetime>
-          </div>
-          <div class="grid-item">
-            <h2>Highlight Today</h2>
-            <ion-datetime locale="en-US" id="highlightToday" presentation="date"></ion-datetime>
+            <ion-datetime locale="en-US" id="withArray2" presentation="date" mode="ios"></ion-datetime>
           </div>
         </div>
       </ion-content>
@@ -64,46 +58,63 @@
     <script>
       document.querySelector('#withArray').highlightedDates = [
         {
-          date: '2023-01-02',
-          textColor: 'purple',
-          backgroundColor: 'pink',
+          date: '2024-04-30',
+          type: 1
         },
         {
-          date: '2023-01-04',
-          textColor: 'firebrick',
-          backgroundColor: 'salmon',
+          date: '2024-04-05',
+          type: 1
         },
         {
-          date: '2023-01-06',
-          textColor: 'blue',
-          backgroundColor: 'lightblue',
+          date: '2024-04-02',
+          type: 3
         },
+        {
+          date: '2024-04-16',
+          type: 4
+        },
+        {
+          date: '2024-04-18',
+          type: 2
+        },
+        {
+          date: '2024-04-19',
+          type: 3
+        },
+        {
+          date: '2024-04-26',
+          type: 1
+        }
       ];
-
-      document.querySelector('#withCallback').highlightedDates = (isoString) => {
-        const date = new Date(isoString);
-        const utcDay = date.getUTCDate();
-        if (utcDay % 5 === 0) {
-          return {
-            textColor: 'purple',
-            backgroundColor: 'pink',
-          };
-        }
-
-        if (utcDay % 3 === 0) {
-          return {
-            textColor: 'blue',
-            backgroundColor: 'lightblue',
-          };
-        }
-      };
-
-      document.querySelector('#highlightToday').highlightedDates = [
+      document.querySelector('#withArray2').highlightedDates = [
         {
-          date: new Date().toISOString().split('T')[0],
-          textColor: 'purple',
-          backgroundColor: 'pink',
+          date: '2024-04-30',
+          type: 1
         },
+        {
+          date: '2024-04-05',
+          type: 1
+        },
+        {
+          date: '2024-04-02',
+          type: 3
+        },
+        {
+          date: '2024-04-16',
+          type: 4
+        },
+        {
+          date: '2024-04-18',
+          type: 2
+        },
+        {
+          date: '2024-04-19',
+          type: 3
+        },
+        {
+          date: '2024-04-26',
+          type: 1
+        }
       ];
     </script>
   </body>

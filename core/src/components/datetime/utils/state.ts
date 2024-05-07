@@ -1,10 +1,11 @@
 import { printIonError } from '@utils/logging';
 
-import type {
-  DatetimeHighlight,
-  DatetimeHighlightCallback,
-  DatetimeHighlightStyle,
-  DatetimeParts,
+import {
+  DatetimeHighlightType,
+  type DatetimeHighlight,
+  type DatetimeHighlightCallback,
+  type DatetimeHighlightStyle,
+  type DatetimeParts,
 } from '../datetime-interface';
 
 import { isAfter, isBefore, isSameDay } from './comparison';
@@ -203,12 +204,9 @@ export const getHighlightStyles = (
   if (Array.isArray(highlightedDates)) {
     const dateStringWithoutTime = dateIsoString.split('T')[0];
     const matchingHighlight = highlightedDates.find((hd) => hd.date === dateStringWithoutTime);
-    if (matchingHighlight) {
-      return {
-        textColor: matchingHighlight.textColor,
-        backgroundColor: matchingHighlight.backgroundColor,
-      } as DatetimeHighlightStyle;
-    }
+    return {
+      type: matchingHighlight ? matchingHighlight.type : DatetimeHighlightType.none
+    } as DatetimeHighlightStyle;
   } else {
     /**
      * Wrap in a try-catch to prevent exceptions in the user's function

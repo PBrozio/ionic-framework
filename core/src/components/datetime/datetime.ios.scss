@@ -3,8 +3,7 @@
 @import "../../themes/ionic.globals.ios";
 
 :host {
-  --background: #{ion-color(light, base)};
-  --background-rgb: #{ion-color(light, base, null, true)};
+  --background: var(--ion-color-step-100, var(--ion-background-color-step-100, #ffffff));
   --title-color: #{$text-color-step-400};
 }
 
@@ -232,29 +231,12 @@
   font-size: dynamic-font-max(20px, 1.6);
 }
 
-.calendar-day.calendar-day-active {
-  background: current-color(base, 0.2);
-
-  font-size: dynamic-font-max(22px, 1.6);
-}
-
 /**
  * Day that today but not selected
  * should have ion-color for text color.
  */
 :host .calendar-day.calendar-day-today {
-  color: current-color(base);
-}
-
-/**
- * Day that is not today but
- * is selected should have ion-color for
- * text color and be bolder.
- */
-:host .calendar-day.calendar-day-active {
-  color: current-color(base);
-
-  font-weight: 600;
+  text-decoration: underline 3px;
 }
 
 /**
@@ -262,9 +244,9 @@
  * should have base background color
  * with contrast text.
  */
-:host .calendar-day.calendar-day-today.calendar-day-active {
-  background: current-color(base);
-  color: current-color(contrast);
+:host .calendar-day.calendar-day-active {
+  outline: 2px dotted blue !important;
+  outline-offset: 2px !important;
 }
 
 // Time / Header
