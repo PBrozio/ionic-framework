@@ -26,16 +26,17 @@ export type DatetimeHighlightStyle = {
 };
 
 export enum DatetimeHighlightType {
-  none = 0,
-  entry = 1,
-  entryOwnApproval = 2,
-  entryApproved = 3,
-  entryCanceled = 4
+  entry = 0,
+  entryOwnApproval = 1,
+  entryApproved = 2,
+  entryCanceled = 3
 }
 
 export type DatetimeHighlight = { date: string } & DatetimeHighlightStyle;
 
 export type DatetimeHighlightCallback = (dateIsoString: string) => DatetimeHighlightStyle | undefined;
+
+export type VacationDatesCallback = (dateIsoString: string) => string | undefined;
 
 export type DatetimeHourCycle = 'h11' | 'h12' | 'h23' | 'h24';
 

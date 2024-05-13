@@ -65,6 +65,7 @@ import {
 import {
   getCalendarDayState,
   getHighlightStyles,
+  getVacationDays,
   isDayDisabled,
   isMonthDisabled,
   isNextMonthDisabled,
@@ -377,7 +378,7 @@ export class Datetime implements ComponentInterface {
   @Prop() multiple = false;
 
   /**
-   * Used to apply custom text and background colors to specific dates.
+   * Used to apply an event type to specific dates.
    *
    * Can be either an array of objects containing ISO strings and colors,
    * or a callback that receives an ISO string and returns the colors.
@@ -386,6 +387,13 @@ export class Datetime implements ComponentInterface {
    * with `preferWheel="false"`.
    */
   @Prop() highlightedDates?: DatetimeHighlight[] | DatetimeHighlightCallback;
+
+  /**
+   * Used to mark specific dates as vacation.
+   *
+   * Must be an array of strings containing ISO strings.
+   */
+  @Prop() vacationDates?: string[];
 
   /**
    * The value of the datetime as a valid ISO 8601 datetime string.
@@ -2228,7 +2236,7 @@ export class Datetime implements ComponentInterface {
         <div class="calendar-month-grid">
           {getDaysOfMonth(month, year, this.firstDayOfWeek % 7).map((dateObject, index) => {
             const { day, dayOfWeek } = dateObject;
-            const { el, highlightedDates, isDateEnabled, multiple } = this;
+            const { el, vacationDates, highlightedDates, isDateEnabled, multiple } = this;
             const referenceParts = { month, day, year };
             const isCalendarPadding = day === null;
             const {
@@ -2288,6 +2296,16 @@ export class Datetime implements ComponentInterface {
               dateStyle = getHighlightStyles(highlightedDates, dateIsoString, el);
             }
 
+            let dateVacation: string | undefined = undefined;
+
+            /**
+             * Custom highlight styles should not override the style for selected dates,
+             * nor apply to "filler days" at the start of the grid.
+             */
+            if (vacationDates !== undefined && day !== null) {
+              dateVacation = getVacationDays(vacationDates, dateIsoString, el);
+            }
+
             let dateParts = undefined;
 
             // "Filler days" at the beginning of the grid should not get the calendar day
@@ -2309,7 +2327,8 @@ export class Datetime implements ComponentInterface {
                   // always take priority.
                   ref={(el) => {
                     if (el) {
-                      if (dateStyle && (dateStyle.type !== DatetimeHighlightType.none)) {
+                      if (dateStyle && (dateStyle.type !== undefined)) {
+                        // highlighting for different event types
                         switch (dateStyle.type) {    
                           case DatetimeHighlightType.entry:
                             el.style.setProperty('background-color', '#026cd41A');
@@ -2330,9 +2349,21 @@ export class Datetime implements ComponentInterface {
                             break;
                         }                        
                       } else {
+                        // default colors for dates with no events
                         el.style.setProperty('background-color', 'transparent', 'important');
                         el.style.setProperty('color', '#000000', 'important');
                         el.style.setProperty('border', 'none', 'important');
+                      }
+
+                      if (dateVacation) {
+                        if (dateStyle && dateStyle.type === DatetimeHighlightType.entryApproved) {
+                          // highlighting for vacation if date has approved event
+                          // ---> inverted color for better visibilty
+                          el.style.setProperty('color', '#ddbbfc');
+                        } else {
+                          // highlighting for vacation if date has no events
+                          el.style.setProperty('color', '#8439d9');
+                        }
                       }
                     }
                   }}

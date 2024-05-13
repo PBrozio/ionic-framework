@@ -861,7 +861,7 @@ export namespace Components {
          */
         "formatOptions"?: FormatOptions;
         /**
-          * Used to apply custom text and background colors to specific dates.  Can be either an array of objects containing ISO strings and colors, or a callback that receives an ISO string and returns the colors.  Only applies to the `date`, `date-time`, and `time-date` presentations, with `preferWheel="false"`.
+          * Used to apply an event type to specific dates.  Can be either an array of objects containing ISO strings and colors, or a callback that receives an ISO string and returns the colors.  Only applies to the `date`, `date-time`, and `time-date` presentations, with `preferWheel="false"`.
          */
         "highlightedDates"?: DatetimeHighlight[] | DatetimeHighlightCallback;
         /**
@@ -948,6 +948,10 @@ export namespace Components {
           * A callback used to format the header text that shows how many dates are selected. Only used if there are 0 or more than 1 selected (i.e. unused for exactly 1). By default, the header text is set to "numberOfDates days".  See https://ionicframework.com/docs/troubleshooting/runtime#accessing-this if you need to access `this` from within the callback.
          */
         "titleSelectedDatesFormatter"?: TitleSelectedDatesFormatter;
+        /**
+          * Used to mark specific dates as vacation.  Must be an array of strings containing ISO strings.
+         */
+        "vacationDates"?: string[];
         /**
           * The value of the datetime as a valid ISO 8601 datetime string. This should be an array of strings only when `multiple="true"`.
          */
@@ -5565,7 +5569,7 @@ declare namespace LocalJSX {
          */
         "formatOptions"?: FormatOptions;
         /**
-          * Used to apply custom text and background colors to specific dates.  Can be either an array of objects containing ISO strings and colors, or a callback that receives an ISO string and returns the colors.  Only applies to the `date`, `date-time`, and `time-date` presentations, with `preferWheel="false"`.
+          * Used to apply an event type to specific dates.  Can be either an array of objects containing ISO strings and colors, or a callback that receives an ISO string and returns the colors.  Only applies to the `date`, `date-time`, and `time-date` presentations, with `preferWheel="false"`.
          */
         "highlightedDates"?: DatetimeHighlight[] | DatetimeHighlightCallback;
         /**
@@ -5676,6 +5680,10 @@ declare namespace LocalJSX {
           * A callback used to format the header text that shows how many dates are selected. Only used if there are 0 or more than 1 selected (i.e. unused for exactly 1). By default, the header text is set to "numberOfDates days".  See https://ionicframework.com/docs/troubleshooting/runtime#accessing-this if you need to access `this` from within the callback.
          */
         "titleSelectedDatesFormatter"?: TitleSelectedDatesFormatter;
+        /**
+          * Used to mark specific dates as vacation.  Must be an array of strings containing ISO strings.
+         */
+        "vacationDates"?: string[];
         /**
           * The value of the datetime as a valid ISO 8601 datetime string. This should be an array of strings only when `multiple="true"`.
          */

@@ -1,7 +1,7 @@
 import { printIonError } from '@utils/logging';
 
 import {
-  DatetimeHighlightType,
+  VacationDatesCallback,
   type DatetimeHighlight,
   type DatetimeHighlightCallback,
   type DatetimeHighlightStyle,
@@ -205,7 +205,7 @@ export const getHighlightStyles = (
     const dateStringWithoutTime = dateIsoString.split('T')[0];
     const matchingHighlight = highlightedDates.find((hd) => hd.date === dateStringWithoutTime);
     return {
-      type: matchingHighlight ? matchingHighlight.type : DatetimeHighlightType.none
+      type: matchingHighlight ? matchingHighlight.type : undefined
     } as DatetimeHighlightStyle;
   } else {
     /**
@@ -217,6 +217,37 @@ export const getHighlightStyles = (
     } catch (e) {
       printIonError(
         'Exception thrown from provided `highlightedDates` callback. Please check your function and try again.',
+        el,
+        e
+      );
+    }
+  }
+
+  return undefined;
+};
+
+/**
+ * Given the value of the vacationDates property
+ * and an ISO string, return the date to hightlight
+ * that date as vacation, or undefined if none are found.
+ */
+export const getVacationDays = (vacationDates: string[] | VacationDatesCallback, dateIsoString: string, el: HTMLIonDatetimeElement): string | undefined => {
+  if (Array.isArray(vacationDates)) {
+    const dateStringWithoutTime = dateIsoString.split('T')[0];
+    const matchingVacation = vacationDates.find((vd) => vd === dateStringWithoutTime);
+    if (matchingVacation) {
+      return matchingVacation;
+    }
+  } else {
+    /**
+     * Wrap in a try-catch to prevent exceptions in the user's function
+     * from interrupting the calendar's rendering.
+     */
+    try {
+      return vacationDates(dateIsoString);
+    } catch (e) {
+      printIonError(
+        'Exception thrown from provided `vacationDates` callback. Please check your function and try again.',
         el,
         e
       );
