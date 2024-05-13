@@ -7,7 +7,7 @@ configs({ directions: ['ltr'] }).forEach(({ title, screenshot, config }) => {
     test.beforeEach(async ({ page }) => {
       await page.setContent(
         `
-        <ion-datetime value="2023-01-01" locale="en-US"></ion-datetime>
+        <ion-datetime locale="en-US"></ion-datetime>
       `,
         config
       );
@@ -19,21 +19,33 @@ configs({ directions: ['ltr'] }).forEach(({ title, screenshot, config }) => {
       await datetime.evaluate((el: HTMLIonDatetimeElement) => {
         el.highlightedDates = [
           {
-            date: '2023-01-01', // ensure selected date style overrides highlight
+            date: '2024-04-30',
             type: DatetimeHighlightType.entry
           },
           {
-            date: '2023-01-02',
-            type: DatetimeHighlightType.entryOwnApproval
+            date: '2024-04-05',
+            type: DatetimeHighlightType.entry
           },
           {
-            date: '2023-01-03',
+            date: '2024-04-01',
             type: DatetimeHighlightType.entryApproved
           },
           {
-            date: '2023-01-03',
+            date: '2024-04-16',
             type: DatetimeHighlightType.entryCanceled
           },
+          {
+            date: '2024-04-18',
+            type: DatetimeHighlightType.entryOwnApproval
+          },
+          {
+            date: '2024-04-19',
+            type: DatetimeHighlightType.entryApproved
+          },
+          {
+            date: '2024-04-26',
+            type: DatetimeHighlightType.entry
+          }
         ];
       });
 
@@ -80,6 +92,29 @@ configs({ directions: ['ltr'] }).forEach(({ title, screenshot, config }) => {
 
       await page.waitForChanges();
       await expect(datetime).toHaveScreenshot(screenshot(`datetime-highlightedDates-callback`));
+    });
+
+    test('should render vacation correctly', async ({ page }) => {
+      const datetime = page.locator('ion-datetime');
+
+      await datetime.evaluate((el: HTMLIonDatetimeElement) => {
+        el.vacationDates = [
+          '2024-01-01',
+          '2024-03-29',
+          '2024-04-01',
+          '2024-05-01',
+          '2024-05-09',
+          '2024-05-20',
+          '2024-05-30',
+          '2024-10-03',
+          '2024-11-01',
+          '2024-12-25',
+          '2024-12-26'
+        ];
+      });
+
+      await page.waitForChanges();
+      await expect(datetime).toHaveScreenshot(screenshot(`datetime-vacationDates`));
     });
   });
 });
