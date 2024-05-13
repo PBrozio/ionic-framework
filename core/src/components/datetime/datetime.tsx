@@ -5,7 +5,7 @@ import { getElementRoot, raf, renderHiddenInput } from '@utils/helpers';
 import { printIonError, printIonWarning } from '@utils/logging';
 import { isRTL } from '@utils/rtl';
 import { createColorClasses } from '@utils/theme';
-import { caretDownSharp, caretUpSharp, chevronBack, chevronDown, chevronForward } from 'ionicons/icons';
+import { caretDownSharp, caretUpSharp, chevronDown, chevronForward, informationCircle } from 'ionicons/icons';
 
 import { getIonMode } from '../../global/ionic-global';
 import type { Color, Mode, StyleEventDetail } from '../../interface';
@@ -109,6 +109,7 @@ export class Datetime implements ComponentInterface {
   private inputId = `ion-dt-${datetimeIds++}`;
   private calendarBodyRef?: HTMLElement;
   private popoverRef?: HTMLIonPopoverElement;
+  private legendModalRef?: HTMLIonModalElement;
   private intersectionTrackerRef?: HTMLElement;
   private clearFocusVisible?: () => void;
   private parsedMinuteValues?: number[];
@@ -2126,15 +2127,20 @@ export class Datetime implements ComponentInterface {
     const expandedIcon = mode === 'ios' ? chevronDown : caretUpSharp;
     const collapsedIcon = mode === 'ios' ? chevronForward : caretDownSharp;
 
-    const prevMonthDisabled = disabled || isPrevMonthDisabled(this.workingParts, this.minParts, this.maxParts);
-    const nextMonthDisabled = disabled || isNextMonthDisabled(this.workingParts, this.maxParts);
-
     // don't use the inheritAttributes util because it removes dir from the host, and we still need that
     const hostDir = this.el.getAttribute('dir') || undefined;
 
     return (
       <div class="calendar-header">
-        <div class="calendar-action-buttons">
+        <di class="calendar-action-buttons">
+          <div class="calendar-filter-event-type">
+            <ion-select aria-label="Filter Event Type" value="all">
+              <ion-select-option value="all">Alle Einträge</ion-select-option>
+              <ion-select-option value="accepted">Genehmigte Einträge</ion-select-option>
+              <ion-select-option value="rejected">Abgelehnte Einträge</ion-select-option>
+            </ion-select>
+          </div>
+
           <div class="calendar-month-year">
             <button
               class={{
@@ -2160,31 +2166,124 @@ export class Datetime implements ComponentInterface {
             </button>
           </div>
 
-          <div class="calendar-next-prev">
+          <div class="calendar-legend">
             <ion-buttons>
-              <ion-button aria-label="Previous month" disabled={prevMonthDisabled} onClick={() => this.prevMonth()}>
+              <ion-button
+                aria-label="Legend"
+                disabled={disabled}
+                onClick={async () => {
+                  const { legendModalRef } = this;
+        
+                  if (legendModalRef) {
+                    legendModalRef.present();
+        
+                    await legendModalRef.onWillDismiss();
+                  }
+                }}>
                 <ion-icon
                   dir={hostDir}
                   aria-hidden="true"
                   slot="icon-only"
-                  icon={chevronBack}
+                  icon={informationCircle}
                   lazy={false}
                   flipRtl
                 ></ion-icon>
-              </ion-button>
-              <ion-button aria-label="Next month" disabled={nextMonthDisabled} onClick={() => this.nextMonth()}>
-                <ion-icon
-                  dir={hostDir}
-                  aria-hidden="true"
-                  slot="icon-only"
-                  icon={chevronForward}
-                  lazy={false}
-                  flipRtl
-                ></ion-icon>
-              </ion-button>
+              </ion-button>              
             </ion-buttons>
+
+            <ion-modal
+              overlayIndex={1}
+              ref={(ref) => this.legendModalRef = ref}>
+              <ng-template>
+                <ion-header>
+                  <ion-toolbar>
+                    <ion-buttons slot="start">
+                      <ion-button onClick={() => this.legendModalRef?.dismiss()}>
+                        Cancel
+                      </ion-button>
+                    </ion-buttons>
+                    <ion-title>Welcome</ion-title>
+                    <ion-buttons slot="end">
+                      <ion-button onClick={() => this.legendModalRef?.dismiss()}>
+                        Confirm
+                      </ion-button>
+                    </ion-buttons>
+                  </ion-toolbar>
+                </ion-header>
+
+                <ion-content class="ion-padding">
+                  <ion-list>
+                    <ion-item>
+                      <div class="calendar-day-wrapper" slot="start">
+                        <button class="calendar-day" style={this.getCalendarDayStyles()}>
+                          15
+                        </button>
+                      </div>
+                      <ion-label>Werktag</ion-label>
+                    </ion-item>
+                    <ion-item>
+                      <div class="calendar-day-wrapper" slot="start">
+                        <button class="calendar-day" style={this.getCalendarDayStyles('transparent', '#8439d9')}>
+                          15
+                        </button>
+                      </div>
+                      <ion-label>Feiertag</ion-label>
+                    </ion-item>
+                    <ion-item>
+                      <div class="calendar-day-wrapper" slot="start">
+                        <button class="calendar-day" style={this.getCalendarDayStyles('transparent', '#000000', true)}>
+                          15
+                        </button>
+                      </div>
+                      <ion-label>heutiger Tag</ion-label>
+                    </ion-item>
+                    <ion-item>
+                      <div class="calendar-day-wrapper" slot="start">
+                        <button class="calendar-day" style={this.getCalendarDayStyles('transparent', '#000000', false, true)}>
+                          15
+                        </button>
+                      </div>
+                      <ion-label>ausgewählter Tag</ion-label>
+                    </ion-item>
+                    <ion-item>
+                      <div class="calendar-day-wrapper" slot="start">
+                        <button class="calendar-day" style={this.getCalendarDayStyles('#026cd41A')}>
+                          15
+                        </button>
+                      </div>
+                      <ion-label>besonderer Eintrag</ion-label>
+                    </ion-item>
+                    <ion-item>
+                      <div class="calendar-day-wrapper" slot="start">
+                        <button class="calendar-day" style={this.getCalendarDayStyles('#026cd41A', '#000000', false, false, true)}>
+                          15
+                        </button>
+                      </div>
+                      <ion-label>Kalendereintrag zur eigenen Freigabe</ion-label>
+                    </ion-item>
+                    <ion-item>
+                      <div class="calendar-day-wrapper" slot="start">
+                        <button class="calendar-day" style={this.getCalendarDayStyles('#026cd4', '#ffffff')}>
+                          15
+                        </button>
+                      </div>
+                      <ion-label>freigegebener Kalendereintrag</ion-label>
+                    </ion-item>
+                    <ion-item>
+                      <div class="calendar-day-wrapper" slot="start">
+                        <button class="calendar-day" style={this.getCalendarDayStyles('#ffc600')}>
+                          15
+                        </button>
+                      </div>
+                      <ion-label>stornierter Kalendereintrag</ion-label>
+                    </ion-item>
+                  </ion-list>
+                </ion-content>
+              </ng-template>
+            </ion-modal>
           </div>
-        </div>
+        </di>
+        
         <div class="calendar-days-of-week" aria-hidden="true">
           {getDaysOfWeek(this.locale, mode, this.firstDayOfWeek % 7).map((d) => {
             return <div class="day-of-week">{d}</div>;
@@ -2192,6 +2291,21 @@ export class Datetime implements ComponentInterface {
         </div>
       </div>
     );
+  }
+  private getCalendarDayStyles(backgroundColor: string = 'transparent', color: string = '#000000', underlined: boolean = false, outlined: boolean = false, bordered: boolean = false) {
+    return {
+      'background-color': backgroundColor,
+      'color': color,
+      'border-radius': '50%',
+      'margin': '0',
+      'padding': '0',
+      'width': '2rem',
+      'height': '2rem',
+      'text-decoration': (underlined ? 'underline' : 'none'),
+      'outline': (outlined ? '2px dotted blue' : 'none'),
+      'outline-offset': (outlined ? '2px' : '0'),
+      'border': (bordered ? '2px dashed #026cd4' : 'none')
+    };
   }
   private renderMonth(month: number, year: number) {
     const { disabled, readonly } = this;

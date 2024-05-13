@@ -120,7 +120,7 @@
   display: flex;
 }
 
-:host(.show-month-and-year) .calendar-next-prev,
+:host(.show-month-and-year) .calendar-legend,
 :host(.show-month-and-year) .calendar-days-of-week,
 :host(.show-month-and-year) .calendar-body,
 :host(.show-month-and-year) .datetime-time {
@@ -418,15 +418,15 @@
 
 // Year Picker
 // -----------------------------------
-:host(.show-month-and-year) .calendar-action-buttons .calendar-month-year-toggle {
+:host(.show-month-and-year) .calendar-action-buttons .calendar-month-year-toggle, .calendar-filter-event-type-toggle {
   color: #{current-color(base)};
 }
 
-.calendar-month-year {
+.calendar-month-year, .calendar-filter-event-type {
   min-width: 0;
 }
 
-.calendar-month-year-toggle {
+.calendar-month-year-toggle, .calendar-filter-event-type-toggle {
   @include text-inherit();
 
   position: relative;
