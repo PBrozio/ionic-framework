@@ -2350,9 +2350,9 @@ export class Datetime implements ComponentInterface {
                         }                        
                       } else {
                         // default colors for dates with no events
-                        el.style.setProperty('background-color', 'transparent', 'important');
-                        el.style.setProperty('color', '#000000', 'important');
-                        el.style.setProperty('border', 'none', 'important');
+                        el.style.setProperty('background-color', 'transparent');
+                        el.style.setProperty('color', '#000000');
+                        el.style.setProperty('border', 'none');
                       }
 
                       if (dateVacation) {

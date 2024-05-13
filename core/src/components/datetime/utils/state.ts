@@ -235,9 +235,7 @@ export const getVacationDays = (vacationDates: string[] | VacationDatesCallback,
   if (Array.isArray(vacationDates)) {
     const dateStringWithoutTime = dateIsoString.split('T')[0];
     const matchingVacation = vacationDates.find((vd) => vd === dateStringWithoutTime);
-    if (matchingVacation) {
-      return matchingVacation;
-    }
+    return matchingVacation ? matchingVacation : undefined;
   } else {
     /**
      * Wrap in a try-catch to prevent exceptions in the user's function
