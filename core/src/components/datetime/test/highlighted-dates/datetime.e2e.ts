@@ -61,7 +61,6 @@ configs({ directions: ['ltr'] }).forEach(({ title, screenshot, config }) => {
           const date = new Date(isoString);
           const utcDay = date.getUTCDate();
 
-          // ensure selected date style overrides highlight
           if (utcDay === 1) {
             return {
               type: DatetimeHighlightType.entry
