@@ -2132,13 +2132,15 @@ export class Datetime implements ComponentInterface {
 
     return (
       <div class="calendar-header">
-        <di class="calendar-action-buttons">
+        <div class="calendar-action-buttons">
           <div class="calendar-filter-event-type">
-            <ion-select aria-label="Filter Event Type" value="all">
-              <ion-select-option value="all">Alle Einträge</ion-select-option>
-              <ion-select-option value="accepted">Genehmigte Einträge</ion-select-option>
-              <ion-select-option value="rejected">Abgelehnte Einträge</ion-select-option>
-            </ion-select>
+            <ion-item lines="none">
+              <ion-select aria-label="Filter Event Type" value="all">
+                <ion-select-option value="all">Alle Einträge</ion-select-option>
+                <ion-select-option value="accepted">Genehmigte Einträge</ion-select-option>
+                <ion-select-option value="rejected">Abgelehnte Einträge</ion-select-option>
+              </ion-select>                
+            </ion-item>
           </div>
 
           <div class="calendar-month-year">
@@ -2202,12 +2204,7 @@ export class Datetime implements ComponentInterface {
                         Cancel
                       </ion-button>
                     </ion-buttons>
-                    <ion-title>Welcome</ion-title>
-                    <ion-buttons slot="end">
-                      <ion-button onClick={() => this.legendModalRef?.dismiss()}>
-                        Confirm
-                      </ion-button>
-                    </ion-buttons>
+                    <ion-title>Legend</ion-title>
                   </ion-toolbar>
                 </ion-header>
 
@@ -2282,7 +2279,7 @@ export class Datetime implements ComponentInterface {
               </ng-template>
             </ion-modal>
           </div>
-        </di>
+        </div>
         
         <div class="calendar-days-of-week" aria-hidden="true">
           {getDaysOfWeek(this.locale, mode, this.firstDayOfWeek % 7).map((d) => {
@@ -2304,7 +2301,8 @@ export class Datetime implements ComponentInterface {
       'text-decoration': (underlined ? 'underline' : 'none'),
       'outline': (outlined ? '2px dotted blue' : 'none'),
       'outline-offset': (outlined ? '2px' : '0'),
-      'border': (bordered ? '2px dashed #026cd4' : 'none')
+      'border': (bordered ? '2px dashed #026cd4' : 'none'),
+      'cursor': 'default'
     };
   }
   private renderMonth(month: number, year: number) {

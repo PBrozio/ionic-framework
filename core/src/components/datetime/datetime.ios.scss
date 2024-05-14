@@ -50,17 +50,8 @@
   @include margin(10px, 8px, 10px, 0);
 }
 
-:host .calendar-action-buttons .calendar-month-year-toggle ion-icon,
-:host .calendar-action-buttons ion-buttons ion-button {
-  color: current-color(base);
-}
-
-:host .calendar-action-buttons ion-buttons {
-  @include padding($datetime-ios-padding * 0.5, 0, 0, 0);
-}
-
-:host .calendar-action-buttons ion-buttons ion-button {
-  @include margin(0, 0, 0, 0);
+:host .calendar-action-buttons ion-button {
+  --color: #{$text-color-step-350};
 }
 
 // Calendar / Header / Days of Week
