@@ -3712,6 +3712,8 @@ declare global {
         new (): HTMLIonContentElement;
     };
     interface HTMLIonDatetimeElementEventMap {
+        "ionEventFilterChanged": number;
+        "ionLegendClicked": void;
         "ionCancel": void;
         "ionChange": DatetimeChangeEventDetail;
         "ionValueChange": DatetimeChangeEventDetail;
@@ -5629,9 +5631,17 @@ declare namespace LocalJSX {
          */
         "onIonChange"?: (event: IonDatetimeCustomEvent<DatetimeChangeEventDetail>) => void;
         /**
+          * Emitted when the selection of the ion select used for the event type filtering was changed.
+         */
+        "onIonEventFilterChanged"?: (event: IonDatetimeCustomEvent<number>) => void;
+        /**
           * Emitted when the datetime has focus.
          */
         "onIonFocus"?: (event: IonDatetimeCustomEvent<void>) => void;
+        /**
+          * Emitted when the legend button in the datetime header was clicked.
+         */
+        "onIonLegendClicked"?: (event: IonDatetimeCustomEvent<void>) => void;
         /**
           * Emitted when componentDidRender is fired.
          */

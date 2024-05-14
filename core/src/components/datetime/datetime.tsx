@@ -67,9 +67,7 @@ import {
   getHighlightStyles,
   getVacationDays,
   isDayDisabled,
-  isMonthDisabled,
-  isNextMonthDisabled,
-  isPrevMonthDisabled,
+  isMonthDisabled
 } from './utils/state';
 import { checkForPresentationFormatMismatch, warnIfTimeZoneProvided } from './utils/validate';
 
@@ -109,7 +107,6 @@ export class Datetime implements ComponentInterface {
   private inputId = `ion-dt-${datetimeIds++}`;
   private calendarBodyRef?: HTMLElement;
   private popoverRef?: HTMLIonPopoverElement;
-  private legendModalRef?: HTMLIonModalElement;
   private intersectionTrackerRef?: HTMLElement;
   private clearFocusVisible?: () => void;
   private parsedMinuteValues?: number[];
@@ -479,6 +476,16 @@ export class Datetime implements ComponentInterface {
    * `"time"`, `"month"`, `"month-year"`, or `"year"`.
    */
   @Prop() preferWheel = false;
+
+  /**
+   * Emitted when the selection of the ion select used for the event type filtering was changed.
+   */
+  @Event() ionEventFilterChanged!: EventEmitter<number>;
+
+  /**
+   * Emitted when the legend button in the datetime header was clicked.
+   */
+  @Event() ionLegendClicked!: EventEmitter<void>;
 
   /**
    * Emitted when the datetime selection was cancelled.
@@ -2137,7 +2144,15 @@ export class Datetime implements ComponentInterface {
         <div class="calendar-action-buttons">
           <div class="calendar-filter-event-type">
             <ion-item lines="none">
-              <ion-select aria-label="Filter Event Type" value="all" cancelText={this.renderCancelText()}>
+              <ion-select
+                aria-label="Filter Event Type"
+                value={0}
+                cancelText={this.renderCancelText()}
+                onIonChange={(ev: any) => {
+                  if (ev.target !== null && ev.target.value !== null) {
+                    this.ionEventFilterChanged.emit(ev.target.value);
+                  }
+                }}>
                 <ion-select-option value={eventTypeFilter[0].value}>{eventTypeFilter[0].label}</ion-select-option>
                 <ion-select-option value={eventTypeFilter[1].value}>{eventTypeFilter[1].label}</ion-select-option>
                 <ion-select-option value={eventTypeFilter[2].value}>{eventTypeFilter[2].label}</ion-select-option>
@@ -2176,13 +2191,7 @@ export class Datetime implements ComponentInterface {
                 aria-label="Legend"
                 disabled={disabled}
                 onClick={async () => {
-                  const { legendModalRef } = this;
-        
-                  if (legendModalRef) {
-                    legendModalRef.present();
-        
-                    await legendModalRef.onWillDismiss();
-                  }
+                  this.ionLegendClicked.emit();
                 }}>
                 <ion-icon
                   dir={hostDir}
@@ -2194,92 +2203,6 @@ export class Datetime implements ComponentInterface {
                 ></ion-icon>
               </ion-button>              
             </ion-buttons>
-
-            <ion-modal
-              overlayIndex={1}
-              ref={(ref) => this.legendModalRef = ref}>
-              <ng-template>
-                <ion-header>
-                  <ion-toolbar>
-                    <ion-buttons slot="start">
-                      <ion-button onClick={() => this.legendModalRef?.dismiss()}>
-                        {this.renderLegendElement('back', 'Back')}
-                      </ion-button>
-                    </ion-buttons>
-                    <ion-title>{this.renderLegendElement('title', 'Legend')}</ion-title>
-                  </ion-toolbar>
-                </ion-header>
-
-                <ion-content class="ion-padding">
-                  <ion-list>
-                    <ion-item>
-                      <div class="calendar-day-wrapper" slot="start">
-                        <button class="calendar-day" style={this.getCalendarDayStyles()}>
-                          15
-                        </button>
-                      </div>
-                      <ion-label>{this.renderLegendElement('working-day', 'Working day')}</ion-label>
-                    </ion-item>
-                    <ion-item>
-                      <div class="calendar-day-wrapper" slot="start">
-                        <button class="calendar-day" style={this.getCalendarDayStyles('transparent', '#8439d9')}>
-                          15
-                        </button>
-                      </div>
-                      <ion-label>{this.renderLegendElement('holiday', 'Holiday')}</ion-label>
-                    </ion-item>
-                    <ion-item>
-                      <div class="calendar-day-wrapper" slot="start">
-                        <button class="calendar-day" style={this.getCalendarDayStyles('transparent', '#000000', true)}>
-                          15
-                        </button>
-                      </div>
-                      <ion-label>{this.renderLegendElement('today', 'Today')}</ion-label>
-                    </ion-item>
-                    <ion-item>
-                      <div class="calendar-day-wrapper" slot="start">
-                        <button class="calendar-day" style={this.getCalendarDayStyles('transparent', '#000000', false, true)}>
-                          15
-                        </button>
-                      </div>
-                      <ion-label>{this.renderLegendElement('selected-day', 'Selected day')}</ion-label>
-                    </ion-item>
-                    <ion-item>
-                      <div class="calendar-day-wrapper" slot="start">
-                        <button class="calendar-day" style={this.getCalendarDayStyles('#026cd41A')}>
-                          15
-                        </button>
-                      </div>
-                      <ion-label>{this.renderLegendElement('entry', 'Special entry')}</ion-label>
-                    </ion-item>
-                    <ion-item>
-                      <div class="calendar-day-wrapper" slot="start">
-                        <button class="calendar-day" style={this.getCalendarDayStyles('#026cd41A', '#000000', false, false, true)}>
-                          15
-                        </button>
-                      </div>
-                      <ion-label>{this.renderLegendElement('entry-own-approval', 'Calendar entry for your own approval')}</ion-label>
-                    </ion-item>
-                    <ion-item>
-                      <div class="calendar-day-wrapper" slot="start">
-                        <button class="calendar-day" style={this.getCalendarDayStyles('#026cd4', '#ffffff')}>
-                          15
-                        </button>
-                      </div>
-                      <ion-label>{this.renderLegendElement('entry-approved', 'Approved calendar entry')}</ion-label>
-                    </ion-item>
-                    <ion-item>
-                      <div class="calendar-day-wrapper" slot="start">
-                        <button class="calendar-day" style={this.getCalendarDayStyles('#ffc600')}>
-                          15
-                        </button>
-                      </div>
-                      <ion-label>{this.renderLegendElement('entry-canceled', 'Canceled calendar entry')}</ion-label>
-                    </ion-item>
-                  </ion-list>
-                </ion-content>
-              </ng-template>
-            </ion-modal>
           </div>
         </div>
         
@@ -2290,22 +2213,6 @@ export class Datetime implements ComponentInterface {
         </div>
       </div>
     );
-  }
-  private getCalendarDayStyles(backgroundColor: string = 'transparent', color: string = '#000000', underlined: boolean = false, outlined: boolean = false, bordered: boolean = false) {
-    return {
-      'background-color': backgroundColor,
-      'color': color,
-      'border-radius': '50%',
-      'margin': '0',
-      'padding': '0',
-      'width': '2rem',
-      'height': '2rem',
-      'text-decoration': (underlined ? 'underline' : 'none'),
-      'outline': (outlined ? '2px dotted blue' : 'none'),
-      'outline-offset': (outlined ? '2px' : '0'),
-      'border': (bordered ? '2px dashed #026cd4' : 'none'),
-      'cursor': 'default'
-    };
   }
   private renderMonth(month: number, year: number) {
     const { disabled, readonly } = this;
@@ -2588,29 +2495,18 @@ export class Datetime implements ComponentInterface {
 
     return [
       {
-        value: 'all',
+        value: 0,
         label: allLabel
       },
       {
-        value: 'accepted',
+        value: 1,
         label: acceptedLabel
       },
       {
-        value: 'canceled',
+        value: 2,
         label: canceledLabel
       }
     ];
-  }
-
-  private renderLegendElement(name: string, altValue: string) {
-    let label: string = altValue;
-
-    const eLement = this.el.querySelector(`[slot="legend-${name}"]`);
-    if (eLement !== null && eLement.firstChild !== null && eLement.firstChild.nodeValue !== null) {
-      label = eLement.firstChild.nodeValue;
-    };
-
-    return label;
   }
   
   private renderCancelText() {
