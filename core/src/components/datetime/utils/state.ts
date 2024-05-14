@@ -1,7 +1,7 @@
 import { printIonError } from '@utils/logging';
 
 import {
-  VacationDatesCallback,
+  type VacationDatesCallback,
   type DatetimeHighlight,
   type DatetimeHighlightCallback,
   type DatetimeHighlightStyle,
@@ -205,7 +205,7 @@ export const getHighlightStyles = (
     const dateStringWithoutTime = dateIsoString.split('T')[0];
     const matchingHighlight = highlightedDates.find((hd) => hd.date === dateStringWithoutTime);
     return {
-      type: matchingHighlight ? matchingHighlight.type : undefined
+      type: matchingHighlight ? matchingHighlight.type : undefined,
     } as DatetimeHighlightStyle;
   } else {
     /**
@@ -231,7 +231,11 @@ export const getHighlightStyles = (
  * and an ISO string, return the date to hightlight
  * that date as vacation, or undefined if none are found.
  */
-export const getVacationDays = (vacationDates: string[] | VacationDatesCallback, dateIsoString: string, el: HTMLIonDatetimeElement): string | undefined => {
+export const getVacationDays = (
+  vacationDates: string[] | VacationDatesCallback,
+  dateIsoString: string,
+  el: HTMLIonDatetimeElement
+): string | undefined => {
   if (Array.isArray(vacationDates)) {
     const dateStringWithoutTime = dateIsoString.split('T')[0];
     const matchingVacation = vacationDates.find((vd) => vd === dateStringWithoutTime);

@@ -122,9 +122,11 @@
 
 :host(.show-month-and-year) .calendar-header,
 :host(.show-month-and-year) .calendar-action-buttons {
-  width: 100%;
   display: flex;
+
   justify-content: center;
+  
+  width: 100%;
 }
 
 :host(.show-month-and-year) .calendar-filter-event-type,
@@ -218,9 +220,9 @@
 :host .calendar-action-buttons {
   display: flex;
 
-  justify-content: space-between;
-
   align-items: center;
+
+  justify-content: space-between;
 }
 
 :host .calendar-action-buttons ion-button {
@@ -433,17 +435,20 @@
 }
 
 .calendar-filter-event-type, .calendar-legend {
-  width: (1 / 4) * 100%;
+  width: 25%;
 }
 
 .calendar-month-year {
   display: flex;
+
   justify-content: center;
-  width: (1 / 2) * 100%;
+
+  width: 50%;
 }
 
 .calendar-legend {
   display: flex;
+
   justify-content: flex-end;
 }
 

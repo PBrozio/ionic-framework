@@ -67,7 +67,7 @@ import {
   getHighlightStyles,
   getVacationDays,
   isDayDisabled,
-  isMonthDisabled
+  isMonthDisabled,
 } from './utils/state';
 import { checkForPresentationFormatMismatch, warnIfTimeZoneProvided } from './utils/validate';
 
@@ -2152,11 +2152,12 @@ export class Datetime implements ComponentInterface {
                   if (ev.target !== null && ev.target.value !== null) {
                     this.ionEventFilterChanged.emit(ev.target.value);
                   }
-                }}>
+                }}
+              >
                 <ion-select-option value={eventTypeFilter[0].value}>{eventTypeFilter[0].label}</ion-select-option>
                 <ion-select-option value={eventTypeFilter[1].value}>{eventTypeFilter[1].label}</ion-select-option>
                 <ion-select-option value={eventTypeFilter[2].value}>{eventTypeFilter[2].label}</ion-select-option>
-              </ion-select>                
+              </ion-select>
             </ion-item>
           </div>
 
@@ -2192,7 +2193,8 @@ export class Datetime implements ComponentInterface {
                 disabled={disabled}
                 onClick={async () => {
                   this.ionLegendClicked.emit();
-                }}>
+                }}
+              >
                 <ion-icon
                   dir={hostDir}
                   aria-hidden="true"
@@ -2201,11 +2203,11 @@ export class Datetime implements ComponentInterface {
                   lazy={false}
                   flipRtl
                 ></ion-icon>
-              </ion-button>              
+              </ion-button>
             </ion-buttons>
           </div>
         </div>
-        
+
         <div class="calendar-days-of-week" aria-hidden="true">
           {getDaysOfWeek(this.locale, mode, this.firstDayOfWeek % 7).map((d) => {
             return <div class="day-of-week">{d}</div>;
@@ -2348,27 +2350,34 @@ export class Datetime implements ComponentInterface {
                   // always take priority.
                   ref={(el) => {
                     if (el) {
-                      if (dateStyle && (dateStyle.type !== undefined)) {
-                        // highlighting for different event types
-                        switch (dateStyle.type) {    
-                          case DatetimeHighlightType.entry:
-                            el.style.setProperty('background-color', '#026cd41A');
-                            break;
+                      if (dateStyle) {
+                        if (dateStyle.type !== undefined) {
+                          // highlighting for different event types
+                          switch (dateStyle.type) {
+                            case DatetimeHighlightType.entry:
+                              el.style.setProperty('background-color', '#026cd41A');
+                              break;
 
-                          case DatetimeHighlightType.entryOwnApproval:
-                            el.style.setProperty('background-color', '#026cd41A');
-                            el.style.setProperty('border', '2px dashed #026cd4');
-                            break;
+                            case DatetimeHighlightType.entryOwnApproval:
+                              el.style.setProperty('background-color', '#026cd41A');
+                              el.style.setProperty('border', '2px dashed #026cd4');
+                              break;
 
-                          case DatetimeHighlightType.entryApproved:
-                            el.style.setProperty('background-color', '#026cd4');
-                            el.style.setProperty('color', '#ffffff');
-                            break;
+                            case DatetimeHighlightType.entryApproved:
+                              el.style.setProperty('background-color', '#026cd4');
+                              el.style.setProperty('color', '#ffffff');
+                              break;
 
-                          case DatetimeHighlightType.entryCanceled:
-                            el.style.setProperty('background-color', '#ffc600');
-                            break;
-                        }                        
+                            case DatetimeHighlightType.entryCanceled:
+                              el.style.setProperty('background-color', '#ffc600');
+                              break;
+                          }
+                        } else {
+                          // default colors for dates with no events
+                          el.style.setProperty('background-color', 'transparent');
+                          el.style.setProperty('color', '#000000');
+                          el.style.setProperty('border', 'none');
+                        }
                       } else {
                         // default colors for dates with no events
                         el.style.setProperty('background-color', 'transparent');
@@ -2479,43 +2488,59 @@ export class Datetime implements ComponentInterface {
     let canceledLabel: string = 'Rejected entries';
 
     const allElement = this.el.querySelector('[slot="event-type-filter-all"]');
-    if (allElement !== null && allElement.firstChild !== null && allElement.firstChild.nodeValue !== null) {
-      allLabel = allElement.firstChild.nodeValue;
-    };
+    if (allElement !== null) {
+      if (allElement.firstChild !== null) {
+        if (allElement.firstChild.nodeValue !== null) {
+          allLabel = allElement.firstChild.nodeValue;
+        }
+      }
+    }
 
     const acceptedElement = this.el.querySelector('[slot="event-type-filter-accepted"]');
-    if (acceptedElement !== null && acceptedElement.firstChild !== null && acceptedElement.firstChild.nodeValue !== null) {
-      acceptedLabel = acceptedElement.firstChild.nodeValue;
-    };
+    if (acceptedElement !== null) {
+      if (acceptedElement.firstChild !== null) {
+        if (acceptedElement.firstChild.nodeValue !== null) {
+          acceptedLabel = acceptedElement.firstChild.nodeValue;
+        }
+      }
+    }
 
     const canceledElement = this.el.querySelector('[slot="event-type-filter-canceled"]');
-    if (canceledElement !== null && canceledElement.firstChild !== null && canceledElement.firstChild.nodeValue !== null) {
-      canceledLabel = canceledElement.firstChild.nodeValue;
-    };
+    if (canceledElement !== null) {
+      if (canceledElement.firstChild !== null) {
+        if (canceledElement.firstChild.nodeValue !== null) {
+          canceledLabel = canceledElement.firstChild.nodeValue;
+        }
+      }
+    }
 
     return [
       {
         value: 0,
-        label: allLabel
+        label: allLabel,
       },
       {
         value: 1,
-        label: acceptedLabel
+        label: acceptedLabel,
       },
       {
         value: 2,
-        label: canceledLabel
-      }
+        label: canceledLabel,
+      },
     ];
   }
-  
+
   private renderCancelText() {
     let label: string = 'Cancel';
 
-    const eLement = this.el.querySelector('[slot="cancel-text"]');
-    if (eLement !== null && eLement.firstChild !== null && eLement.firstChild.nodeValue !== null) {
-      label = eLement.firstChild.nodeValue;
-    };
+    const element = this.el.querySelector('[slot="cancel-text"]');
+    if (element !== null) {
+      if (element.firstChild !== null) {
+        if (element.firstChild.nodeValue !== null) {
+          label = element.firstChild.nodeValue;
+        }
+      }
+    }
 
     return label;
   }

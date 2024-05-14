@@ -29,7 +29,7 @@ export enum DatetimeHighlightType {
   entry = 0,
   entryOwnApproval = 1,
   entryApproved = 2,
-  entryCanceled = 3
+  entryCanceled = 3,
 }
 
 export type DatetimeHighlight = { date: string } & DatetimeHighlightStyle;

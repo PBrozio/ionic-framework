@@ -1,5 +1,6 @@
 import { expect } from '@playwright/test';
 import { configs, test } from '@utils/test/playwright';
+
 import { DatetimeHighlightType } from '../../datetime-interface';
 
 configs({ directions: ['ltr'] }).forEach(({ title, screenshot, config }) => {
@@ -20,32 +21,32 @@ configs({ directions: ['ltr'] }).forEach(({ title, screenshot, config }) => {
         el.highlightedDates = [
           {
             date: '2024-04-30',
-            type: DatetimeHighlightType.entry
+            type: DatetimeHighlightType.entry,
           },
           {
             date: '2024-04-05',
-            type: DatetimeHighlightType.entry
+            type: DatetimeHighlightType.entry,
           },
           {
             date: '2024-04-01',
-            type: DatetimeHighlightType.entryApproved
+            type: DatetimeHighlightType.entryApproved,
           },
           {
             date: '2024-04-16',
-            type: DatetimeHighlightType.entryCanceled
+            type: DatetimeHighlightType.entryCanceled,
           },
           {
             date: '2024-04-18',
-            type: DatetimeHighlightType.entryOwnApproval
+            type: DatetimeHighlightType.entryOwnApproval,
           },
           {
             date: '2024-04-19',
-            type: DatetimeHighlightType.entryApproved
+            type: DatetimeHighlightType.entryApproved,
           },
           {
             date: '2024-04-26',
-            type: DatetimeHighlightType.entry
-          }
+            type: DatetimeHighlightType.entry,
+          },
         ];
       });
 
@@ -63,25 +64,25 @@ configs({ directions: ['ltr'] }).forEach(({ title, screenshot, config }) => {
 
           if (utcDay === 1) {
             return {
-              type: DatetimeHighlightType.entry
+              type: DatetimeHighlightType.entry,
             };
           }
 
           if (utcDay % 5 === 0) {
             return {
-              type: DatetimeHighlightType.entryOwnApproval
+              type: DatetimeHighlightType.entryOwnApproval,
             };
           }
 
           if (utcDay % 3 === 0) {
             return {
-              type: DatetimeHighlightType.entryApproved
+              type: DatetimeHighlightType.entryApproved,
             };
           }
 
           if (utcDay % 7 === 0) {
             return {
-              type: DatetimeHighlightType.entryCanceled
+              type: DatetimeHighlightType.entryCanceled,
             };
           }
 
@@ -108,7 +109,7 @@ configs({ directions: ['ltr'] }).forEach(({ title, screenshot, config }) => {
           '2024-10-03',
           '2024-11-01',
           '2024-12-25',
-          '2024-12-26'
+          '2024-12-26',
         ];
       });
 

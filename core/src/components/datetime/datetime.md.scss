@@ -124,8 +124,8 @@
  * text color and be bolder.
  */
 .calendar-day.calendar-day-active {
-  outline: 2px dotted blue !important;
-  outline-offset: 2px !important;
+  outline: 2px dotted blue;
+  outline-offset: 2px;
 }
 
 // Time / Header

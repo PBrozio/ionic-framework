@@ -417,6 +417,7 @@ ion-datetime,prop,showDefaultTimeLabel,boolean,true,false,false
 ion-datetime,prop,showDefaultTitle,boolean,false,false,false
 ion-datetime,prop,size,"cover" | "fixed",'fixed',false,false
 ion-datetime,prop,titleSelectedDatesFormatter,((selectedDates: string[]) => string) | undefined,undefined,false,false
+ion-datetime,prop,vacationDates,string[] | undefined,undefined,false,false
 ion-datetime,prop,value,null | string | string[] | undefined,undefined,false,false
 ion-datetime,prop,yearValues,number | number[] | string | undefined,undefined,false,false
 ion-datetime,method,cancel,cancel(closeOverlay?: boolean) => Promise<void>
@@ -425,7 +426,9 @@ ion-datetime,method,reset,reset(startDate?: string) => Promise<void>
 ion-datetime,event,ionBlur,void,true
 ion-datetime,event,ionCancel,void,true
 ion-datetime,event,ionChange,DatetimeChangeEventDetail,true
+ion-datetime,event,ionEventFilterChanged,number,true
 ion-datetime,event,ionFocus,void,true
+ion-datetime,event,ionLegendClicked,void,true
 ion-datetime,css-prop,--background
 ion-datetime,css-prop,--background-rgb
 ion-datetime,css-prop,--title-color

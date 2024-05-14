@@ -54,13 +54,18 @@
               <span slot="cancel-text">Abbrechen</span>
             </ion-datetime>
             <h1>With Array - iOS</h1>
-            <ion-datetime locale="de-DE" id="withArrayIos" presentation="date" mode="ios"></ion-datetime>
+            <ion-datetime locale="en-US" id="withArrayIos" presentation="date" mode="ios"></ion-datetime>
           </div>
           <div class="grid-item">
             <h1>With Callback - Android</h1>
-            <ion-datetime locale="de-DE" id="withCallbackAndroid" presentation="date" mode="md"></ion-datetime>
+            <ion-datetime locale="en-US" id="withCallbackAndroid" presentation="date" mode="md"></ion-datetime>
             <h1>With Callback - iOS</h1>
-            <ion-datetime locale="de-DE" id="withCallbackIos" presentation="date" mode="ios"></ion-datetime>
+            <ion-datetime locale="de-DE" id="withCallbackIos" presentation="date" mode="ios">
+              <span slot="event-type-filter-all">Alle Einträge</span>
+              <span slot="event-type-filter-accepted">Genehmigte Einträge</span>
+              <span slot="event-type-filter-canceled">Abgelehnte Einträge</span>
+              <span slot="cancel-text">Abbrechen</span>
+            </ion-datetime>
           </div>
         </div>
       </ion-content>
@@ -69,38 +74,38 @@
     <script>
       const highlightedDates = [
         {
-          date: '2024-04-30',
-          type: 0
+          date: '2024-05-30',
+          type: 0,
         },
         {
-          date: '2024-04-05',
-          type: 0
+          date: '2024-05-05',
+          type: 0,
         },
         {
-          date: '2024-04-01',
-          type: 2
+          date: '2024-05-01',
+          type: 2,
         },
         {
-          date: '2024-04-16',
-          type: 3
+          date: '2024-05-16',
+          type: 3,
         },
         {
-          date: '2024-04-18',
-          type: 1
+          date: '2024-05-18',
+          type: 1,
         },
         {
-          date: '2024-04-19',
-          type: 2
+          date: '2024-05-19',
+          type: 2,
         },
         {
-          date: '2024-04-26',
-          type: 0
-        }
+          date: '2024-05-26',
+          type: 0,
+        },
       ];
       const vacationDates = [
         '2024-01-01',
         '2024-03-29',
-        '2024-04-01',
+        '2024-05-01',
         '2024-05-01',
         '2024-05-09',
         '2024-05-20',
@@ -108,7 +113,7 @@
         '2024-10-03',
         '2024-11-01',
         '2024-12-25',
-        '2024-12-26'
+        '2024-12-26',
       ];
 
       function callBack(isoString) {
@@ -116,37 +121,67 @@
         const utcDay = date.getUTCDate();
         if (utcDay === 1) {
           return {
-            type: 0
+            type: 0,
           };
         }
 
         if (utcDay % 5 === 0) {
           return {
-            type: 1
+            type: 1,
           };
         }
 
         if (utcDay % 3 === 0) {
           return {
-            type: 2
+            type: 2,
           };
         }
 
         if (utcDay % 7 === 0) {
           return {
-            type: 3
+            type: 3,
           };
         }
       }
 
+      document.querySelector('#withArrayAndroid').addEventListener('ionLegendClicked', (ev) => {
+        console.log('ionLegendClicked');
+      });
+      document.querySelector('#withArrayAndroid').addEventListener('ionEventFilterChanged', (ev) => {
+        console.log('ionEventFilterChanged: ' + ev.detail);
+      });
       document.querySelector('#withArrayAndroid').highlightedDates = highlightedDates;
       document.querySelector('#withArrayAndroid').vacationDates = vacationDates;
+
+      document.querySelector('#withArrayIos').addEventListener('ionLegendClicked', (ev) => {
+        console.log('ionLegendClicked');
+      });
+      document.querySelector('#withArrayIos').addEventListener('ionEventFilterChanged', (ev) => {
+        console.log('ionEventFilterChanged: ' + ev.detail);
+      });
       document.querySelector('#withArrayIos').highlightedDates = highlightedDates;
       document.querySelector('#withArrayIos').vacationDates = vacationDates;
 
-      document.querySelector('#withCallbackAndroid').highlightedDates = (isoString) => { return callBack(isoString); };
+      document.querySelector('#withCallbackAndroid').addEventListener('ionLegendClicked', (ev) => {
+        console.log('ionLegendClicked');
+      });
+      document.querySelector('#withCallbackAndroid').addEventListener('ionEventFilterChanged', (ev) => {
+        console.log('ionEventFilterChanged: ' + ev.detail);
+      });
+      document.querySelector('#withCallbackAndroid').highlightedDates = (isoString) => {
+        return callBack(isoString);
+      };
       document.querySelector('#withCallbackAndroid').vacationDates = vacationDates;
-      document.querySelector('#withCallbackIos').highlightedDates = (isoString) => { return callBack(isoString); };
+
+      document.querySelector('#withCallbackIos').addEventListener('ionLegendClicked', (ev) => {
+        console.log('ionLegendClicked');
+      });
+      document.querySelector('#withCallbackIos').addEventListener('ionEventFilterChanged', (ev) => {
+        console.log('ionEventFilterChanged: ' + ev.detail);
+      });
+      document.querySelector('#withCallbackIos').highlightedDates = (isoString) => {
+        return callBack(isoString);
+      };
       document.querySelector('#withCallbackIos').vacationDates = vacationDates;
     </script>
   </body>
