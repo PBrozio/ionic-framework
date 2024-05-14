@@ -2130,15 +2130,17 @@ export class Datetime implements ComponentInterface {
     // don't use the inheritAttributes util because it removes dir from the host, and we still need that
     const hostDir = this.el.getAttribute('dir') || undefined;
 
+    const eventTypeFilter = this.renderEventTypeFilter();
+
     return (
       <div class="calendar-header">
         <div class="calendar-action-buttons">
           <div class="calendar-filter-event-type">
             <ion-item lines="none">
-              <ion-select aria-label="Filter Event Type" value="all">
-                <ion-select-option value="all">Alle Einträge</ion-select-option>
-                <ion-select-option value="accepted">Genehmigte Einträge</ion-select-option>
-                <ion-select-option value="rejected">Abgelehnte Einträge</ion-select-option>
+              <ion-select aria-label="Filter Event Type" value="all" cancelText={this.renderCancelText()}>
+                <ion-select-option value={eventTypeFilter[0].value}>{eventTypeFilter[0].label}</ion-select-option>
+                <ion-select-option value={eventTypeFilter[1].value}>{eventTypeFilter[1].label}</ion-select-option>
+                <ion-select-option value={eventTypeFilter[2].value}>{eventTypeFilter[2].label}</ion-select-option>
               </ion-select>                
             </ion-item>
           </div>
@@ -2201,10 +2203,10 @@ export class Datetime implements ComponentInterface {
                   <ion-toolbar>
                     <ion-buttons slot="start">
                       <ion-button onClick={() => this.legendModalRef?.dismiss()}>
-                        Cancel
+                        {this.renderLegendElement('back', 'Back')}
                       </ion-button>
                     </ion-buttons>
-                    <ion-title>Legend</ion-title>
+                    <ion-title>{this.renderLegendElement('title', 'Legend')}</ion-title>
                   </ion-toolbar>
                 </ion-header>
 
@@ -2216,7 +2218,7 @@ export class Datetime implements ComponentInterface {
                           15
                         </button>
                       </div>
-                      <ion-label>Werktag</ion-label>
+                      <ion-label>{this.renderLegendElement('working-day', 'Working day')}</ion-label>
                     </ion-item>
                     <ion-item>
                       <div class="calendar-day-wrapper" slot="start">
@@ -2224,7 +2226,7 @@ export class Datetime implements ComponentInterface {
                           15
                         </button>
                       </div>
-                      <ion-label>Feiertag</ion-label>
+                      <ion-label>{this.renderLegendElement('holiday', 'Holiday')}</ion-label>
                     </ion-item>
                     <ion-item>
                       <div class="calendar-day-wrapper" slot="start">
@@ -2232,7 +2234,7 @@ export class Datetime implements ComponentInterface {
                           15
                         </button>
                       </div>
-                      <ion-label>heutiger Tag</ion-label>
+                      <ion-label>{this.renderLegendElement('today', 'Today')}</ion-label>
                     </ion-item>
                     <ion-item>
                       <div class="calendar-day-wrapper" slot="start">
@@ -2240,7 +2242,7 @@ export class Datetime implements ComponentInterface {
                           15
                         </button>
                       </div>
-                      <ion-label>ausgewählter Tag</ion-label>
+                      <ion-label>{this.renderLegendElement('selected-day', 'Selected day')}</ion-label>
                     </ion-item>
                     <ion-item>
                       <div class="calendar-day-wrapper" slot="start">
@@ -2248,7 +2250,7 @@ export class Datetime implements ComponentInterface {
                           15
                         </button>
                       </div>
-                      <ion-label>besonderer Eintrag</ion-label>
+                      <ion-label>{this.renderLegendElement('entry', 'Special entry')}</ion-label>
                     </ion-item>
                     <ion-item>
                       <div class="calendar-day-wrapper" slot="start">
@@ -2256,7 +2258,7 @@ export class Datetime implements ComponentInterface {
                           15
                         </button>
                       </div>
-                      <ion-label>Kalendereintrag zur eigenen Freigabe</ion-label>
+                      <ion-label>{this.renderLegendElement('entry-own-approval', 'Calendar entry for your own approval')}</ion-label>
                     </ion-item>
                     <ion-item>
                       <div class="calendar-day-wrapper" slot="start">
@@ -2264,7 +2266,7 @@ export class Datetime implements ComponentInterface {
                           15
                         </button>
                       </div>
-                      <ion-label>freigegebener Kalendereintrag</ion-label>
+                      <ion-label>{this.renderLegendElement('entry-approved', 'Approved calendar entry')}</ion-label>
                     </ion-item>
                     <ion-item>
                       <div class="calendar-day-wrapper" slot="start">
@@ -2272,7 +2274,7 @@ export class Datetime implements ComponentInterface {
                           15
                         </button>
                       </div>
-                      <ion-label>stornierter Kalendereintrag</ion-label>
+                      <ion-label>{this.renderLegendElement('entry-canceled', 'Canceled calendar entry')}</ion-label>
                     </ion-item>
                   </ion-list>
                 </ion-content>
@@ -2562,6 +2564,64 @@ export class Datetime implements ComponentInterface {
     }
 
     return <slot name="time-label">Time</slot>;
+  }
+
+  private renderEventTypeFilter() {
+    let allLabel: string = 'All entries';
+    let acceptedLabel: string = 'Accepted entries';
+    let canceledLabel: string = 'Rejected entries';
+
+    const allElement = this.el.querySelector('[slot="event-type-filter-all"]');
+    if (allElement !== null && allElement.firstChild !== null && allElement.firstChild.nodeValue !== null) {
+      allLabel = allElement.firstChild.nodeValue;
+    };
+
+    const acceptedElement = this.el.querySelector('[slot="event-type-filter-accepted"]');
+    if (acceptedElement !== null && acceptedElement.firstChild !== null && acceptedElement.firstChild.nodeValue !== null) {
+      acceptedLabel = acceptedElement.firstChild.nodeValue;
+    };
+
+    const canceledElement = this.el.querySelector('[slot="event-type-filter-canceled"]');
+    if (canceledElement !== null && canceledElement.firstChild !== null && canceledElement.firstChild.nodeValue !== null) {
+      canceledLabel = canceledElement.firstChild.nodeValue;
+    };
+
+    return [
+      {
+        value: 'all',
+        label: allLabel
+      },
+      {
+        value: 'accepted',
+        label: acceptedLabel
+      },
+      {
+        value: 'canceled',
+        label: canceledLabel
+      }
+    ];
+  }
+
+  private renderLegendElement(name: string, altValue: string) {
+    let label: string = altValue;
+
+    const eLement = this.el.querySelector(`[slot="legend-${name}"]`);
+    if (eLement !== null && eLement.firstChild !== null && eLement.firstChild.nodeValue !== null) {
+      label = eLement.firstChild.nodeValue;
+    };
+
+    return label;
+  }
+  
+  private renderCancelText() {
+    let label: string = 'Cancel';
+
+    const eLement = this.el.querySelector('[slot="cancel-text"]');
+    if (eLement !== null && eLement.firstChild !== null && eLement.firstChild.nodeValue !== null) {
+      label = eLement.firstChild.nodeValue;
+    };
+
+    return label;
   }
 
   private renderTimeOverlay() {

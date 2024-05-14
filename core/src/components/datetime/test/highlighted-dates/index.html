@@ -47,15 +47,30 @@
         <div class="grid">
           <div class="grid-item">
             <h1>With Array - Android</h1>
-            <ion-datetime locale="en-US" id="withArrayAndroid" presentation="date" mode="md"></ion-datetime>
+            <ion-datetime locale="de-DE" id="withArrayAndroid" presentation="date" mode="md">
+              <span slot="event-type-filter-all">Alle Einträge</span>
+              <span slot="event-type-filter-accepted">Genehmigte Einträge</span>
+              <span slot="event-type-filter-canceled">Abgelehnte Einträge</span>
+              <span slot="cancel-text">Abbrechen</span>
+              <span slot="legend-back">Zurück</span>
+              <span slot="legend-title">Legende</span>
+              <span slot="legend-working-day">Werktag</span>
+              <span slot="legend-holiday">Feiertag</span>
+              <span slot="legend-today">heutiger Tag</span>
+              <span slot="legend-selected-day">ausgewählter Tag</span>
+              <span slot="legend-entry">besonderer Eintrag</span>
+              <span slot="legend-entry-own-approval">Kalendereintrag zur eigenen Freigabe</span>
+              <span slot="legend-entry-approved">freigegebener Kalendereintrag</span>
+              <span slot="legend-entry-canceled">stornierter Kalendereintrag</span>
+            </ion-datetime>
             <h1>With Array - iOS</h1>
-            <ion-datetime locale="en-US" id="withArrayIos" presentation="date" mode="ios"></ion-datetime>
+            <ion-datetime locale="de-DE" id="withArrayIos" presentation="date" mode="ios"></ion-datetime>
           </div>
           <div class="grid-item">
             <h1>With Callback - Android</h1>
-            <ion-datetime locale="en-US" id="withCallbackAndroid" presentation="date" mode="md"></ion-datetime>
+            <ion-datetime locale="de-DE" id="withCallbackAndroid" presentation="date" mode="md"></ion-datetime>
             <h1>With Callback - iOS</h1>
-            <ion-datetime locale="en-US" id="withCallbackIos" presentation="date" mode="ios"></ion-datetime>
+            <ion-datetime locale="de-DE" id="withCallbackIos" presentation="date" mode="ios"></ion-datetime>
           </div>
         </div>
       </ion-content>
